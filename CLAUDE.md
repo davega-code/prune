@@ -6,6 +6,9 @@
 in sync with the remote, or never pushed with zero unique commits. It never touches branches
 with unpushed work, the current branch, or the default branch.
 
+It also removes stale worktrees that the branch pass cannot reach: registrations whose directory
+is gone, and abandoned detached checkouts.
+
 ## ZEN.md principles apply here
 
 - Write as little code as possible to solve the actual problem
@@ -24,10 +27,20 @@ src/prune/
 ## Key invariants
 
 - Always operates on the cwd's repo — no `--repo` flag, no config file
-- Safe-to-delete categories: `gone`, `synced`, `never_pushed_empty`
-- Always-skip categories: `ahead_unpushed`, `never_pushed_unique` — never deleted even with `--yes`
+- Safe-to-delete branch categories: `gone`, `synced`, `never_pushed_empty`
+- Always-skip branch categories: `ahead_unpushed`, `never_pushed_unique` — never deleted even
+  with `--yes`
+- Safe-to-delete worktree categories: `prunable` (directory gone), `detached` (detached HEAD,
+  clean, older than the cutoff)
+- Always-skip worktree category: `detached_dirty`
 - Fail-safe: if the default branch can't be resolved or a diff can't be computed, treat the
   branch as unsafe (skip it) rather than assume it's safe to delete
+- A worktree that still points at a branch never appears in the worktree table. The branch pass
+  owns it, so nothing is reported or deleted twice
+- One branch can be checked out in several worktrees. `clean` removes every one of them before
+  it deletes the branch, or `git branch -D` fails
+- `clean` handles worktrees before branches, so `git worktree prune` first releases a branch that
+  a missing worktree still holds
 - Branches checked out in a `git worktree` are handled: worktree removed first if clean, branch
   skipped with a warning if the worktree is dirty or removal fails (e.g. long path, locked file)
 
@@ -39,13 +52,13 @@ Only if it can't be expressed as a flag on `list`/`clean`. Update this file's co
 
 | Command | What it does |
 |---------|-------------|
-| `prune list [--days N]` | Preview stale branches (default cutoff: 7 days), categorized |
+| `prune list [--days N]` | Preview stale branches and worktrees (default cutoff: 7 days), categorized |
 | `prune clean [--days N] [--yes] [--no-include-synced]` | Delete the safe ones |
 
 ## Installation
 
 ```
-uv tool install --editable D:/Repos/Tools/prune
+uv tool install --editable C:/Repos/Personal/prune
 ```
 
 ## Testing manually
