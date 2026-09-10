@@ -46,7 +46,9 @@ src/prune/
 - `clean` handles worktrees before branches, so `git worktree prune` first releases a branch that
   a missing worktree still holds
 - Branches checked out in a `git worktree` are handled: worktree removed first if clean, branch
-  skipped with a warning if the worktree is dirty or removal fails (e.g. long path, locked file)
+  skipped with a warning if the worktree is dirty or removal fails (e.g. locked file)
+- Every git invocation runs with `-c core.longpaths=true` so deeply nested worktree paths (e.g.
+  under a `*.worktrees` folder) don't fail with "Filename too long" on Windows
 
 ## Adding a new command
 
@@ -64,6 +66,11 @@ Only if it can't be expressed as a flag on `list`/`clean`. Update this file's co
 ```
 uv tool install --editable C:/Repos/Personal/prune
 ```
+
+Public PyPI is the only index `pyproject.toml` knows about, so this works unmodified for anyone
+and never risks a 401 for an external contributor. A machine without public PyPI access (e.g.
+inside Microsoft's network) opts into the internal `SafetyPlatform` feed purely via environment
+variables at install time -- see `README.md` -- with no `pyproject.toml` change.
 
 ## Testing manually
 

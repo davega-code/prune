@@ -35,8 +35,12 @@ class Worktree:
 
 
 def _run(args: list[str], cwd: str | None = None) -> subprocess.CompletedProcess:
+    """core.longpaths avoids "Filename too long" on Windows for deeply nested worktrees
+    (e.g. under a `*.worktrees` folder), without requiring a global git config change."""
     try:
-        return subprocess.run(["git", *args], cwd=cwd, capture_output=True, text=True)
+        return subprocess.run(
+            ["git", "-c", "core.longpaths=true", *args], cwd=cwd, capture_output=True, text=True
+        )
     except OSError as exc:  # cwd is gone, e.g. a locked worktree whose directory was deleted
         return subprocess.CompletedProcess(args, 1, "", str(exc))
 

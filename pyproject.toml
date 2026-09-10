@@ -17,9 +17,3 @@ prune = "prune.cli:main"
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/prune"]
-
-[[tool.uv.index]]
-name = "SafetyPlatform"
-url = "https://microsoft.pkgs.visualstudio.com/STaR/_packaging/SafetyPlatform/pypi/simple/"
-default = true
-username = "SafetyPlatform"
