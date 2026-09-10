@@ -67,10 +67,10 @@ Only if it can't be expressed as a flag on `list`/`clean`. Update this file's co
 uv tool install --editable C:/Repos/Personal/prune
 ```
 
-Public PyPI is the only index `pyproject.toml` knows about, so this works unmodified for anyone
-and never risks a 401 for an external contributor. A machine without public PyPI access (e.g.
-inside Microsoft's network) opts into the internal `SafetyPlatform` feed purely via environment
-variables at install time -- see `README.md` -- with no `pyproject.toml` change.
+Public PyPI is the only index `pyproject.toml` knows about. On a network where it's unreachable,
+point uv at whatever internal index is available with the standard `UV_DEFAULT_INDEX` /
+`UV_INDEX_<NAME>_USERNAME` / `UV_INDEX_<NAME>_PASSWORD` environment variables -- no
+`pyproject.toml` change needed. See uv's index docs for the exact syntax.
 
 ## Testing manually
 

@@ -19,18 +19,6 @@ both and cleans them up.
 uv tool install --editable C:/Repos/Personal/prune
 ```
 
-Defaults to public PyPI, so this works as-is for anyone. `pyproject.toml` has no reference to any
-private feed, so nothing here can 401 for an external contributor. On a machine with no public
-PyPI access (e.g. an internal Microsoft network), point uv at the internal feed first, purely via
-environment variables -- no `pyproject.toml` edit needed:
-
-```powershell
-$env:UV_DEFAULT_INDEX = "SafetyPlatform=https://microsoft.pkgs.visualstudio.com/STaR/_packaging/SafetyPlatform/pypi/simple/"
-$env:UV_INDEX_SAFETYPLATFORM_USERNAME = "SafetyPlatform"
-$env:UV_INDEX_SAFETYPLATFORM_PASSWORD = (az account get-access-token --query accessToken -o tsv)
-uv tool install --editable C:/Repos/Personal/prune
-```
-
 
 ## Usage
 
