@@ -64,7 +64,7 @@ Only if it can't be expressed as a flag on `list`/`clean`. Update this file's co
 ## Installation
 
 ```
-uv tool install --editable C:/Repos/Personal/prune
+uv tool install --editable /path/to/prune
 ```
 
 Public PyPI is the only index `pyproject.toml` knows about. On a network where it's unreachable,

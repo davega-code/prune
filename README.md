@@ -16,9 +16,8 @@ both and cleans them up.
 ## Install
 
 ```
-uv tool install --editable C:/Repos/Personal/prune
+uv tool install --editable /path/to/prune
 ```
-
 
 ## Usage
 
@@ -33,11 +32,11 @@ prune clean --yes       # skip the confirmation prompt
 prune clean --no-include-synced   # only delete remote-deleted/never-pushed branches
 ```
 
-Run from a folder that holds several repos (e.g. your repos root) instead, and `prune` scans
-every git repo underneath it and cleans them all in one pass:
+Run from a folder that holds several repos (e.g. a repos root) instead, and `prune` scans every
+git repo underneath it and cleans them all in one pass:
 
 ```
-cd D:\Repos
+cd ~/repos
 prune list          # every repo under here, each in its own table
 prune clean --yes   # deletes across all of them, one shared confirmation prompt
 ```
