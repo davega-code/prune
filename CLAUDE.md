@@ -26,7 +26,11 @@ src/prune/
 
 ## Key invariants
 
-- Always operates on the cwd's repo — no `--repo` flag, no config file
+- Operates on the cwd's repo, or on every repo found under the cwd if the cwd is not a repo
+  itself -- no `--repo` flag, no config file
+- Repo discovery walks the directory tree for a `.git` directory; a `.git` file (a worktree
+  checkout) is skipped without descending into it, since its branches/worktrees are already
+  reached through the main repo it points back to
 - Safe-to-delete branch categories: `gone`, `synced`, `never_pushed_empty`
 - Always-skip branch categories: `ahead_unpushed`, `never_pushed_unique` — never deleted even
   with `--yes`
@@ -52,8 +56,8 @@ Only if it can't be expressed as a flag on `list`/`clean`. Update this file's co
 
 | Command | What it does |
 |---------|-------------|
-| `prune list [--days N]` | Preview stale branches and worktrees (default cutoff: 7 days), categorized |
-| `prune clean [--days N] [--yes] [--no-include-synced]` | Delete the safe ones |
+| `prune list [--days N]` | Preview stale branches and worktrees (default cutoff: 7 days), categorized, for the cwd repo or every repo under it |
+| `prune clean [--days N] [--yes] [--no-include-synced]` | Delete the safe ones, across every repo scanned |
 
 ## Installation
 

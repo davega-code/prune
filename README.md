@@ -21,7 +21,7 @@ uv tool install --editable C:/Repos/Personal/prune
 
 ## Usage
 
-Run from inside any git repo (operates on that repo's branches):
+Run from inside a git repo to operate on that repo's branches:
 
 ```
 prune list              # preview stale branches and worktrees (default: older than 7 days)
@@ -32,8 +32,19 @@ prune clean --yes       # skip the confirmation prompt
 prune clean --no-include-synced   # only delete remote-deleted/never-pushed branches
 ```
 
-`list` prints two tables: stale branches, then stale worktrees. Each row says `delete` or `skip`
-and gives the reason.
+Run from a folder that holds several repos (e.g. your repos root) instead, and `prune` scans
+every git repo underneath it and cleans them all in one pass:
+
+```
+cd D:\Repos
+prune list          # every repo under here, each in its own table
+prune clean --yes   # deletes across all of them, one shared confirmation prompt
+```
+
+`list` prints two tables per repo: stale branches, then stale worktrees. Each row says `delete`
+or `skip` and gives the reason. A worktree checkout (its own directory with a `.git` file, not a
+repo) is never scanned on its own — its branches and worktrees are already reachable through the
+main repo it belongs to, wherever that is found.
 
 ## Safety rules
 
